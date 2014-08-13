@@ -1,0 +1,16 @@
+<h2>Recent News</h2>
+<div class="recent-news margin-bottom-10">
+
+    {% for entity in entities %}
+        
+        <div class="row-fluid margin-bottom-10">
+            <div class="span3">
+                <img src="{{ asset('uploads/articles/') }}{{entity.image}}" alt="">                        
+            </div>
+            <div class="span9 recent-news-inner">
+                <h3><a href="{{ path('article_view', { 'id': entity.id } ) }}">{{ entity.title }}</a></h3>
+                <p>{{ entity.content[:50] ~ '...' }}</p>
+            </div>                        
+        </div>    
+    {% endfor %}
+</div>

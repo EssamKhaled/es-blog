@@ -1,0 +1,22 @@
+{% extends "LayoutBundle:Frontend:mainLayout.html.twig" %}
+
+{% block login_user %}    
+    {% if app.user %}       
+       <a href="{{ path('dashboard') }}">Admin Panel</a>
+    {% else %}       
+       <a href="{{ path('fos_user_security_login') }}">Login</a>
+    {% endif %}    
+{% endblock %}
+       
+{% block category_filter %}
+  <div class="blog-tags margin-bottom-20">
+        <h2>Filter by Category</h2>
+        <ul>
+            {{ render(controller('FrontendBundle:Article:getCategories' )) }}
+        </ul>
+    </div>
+{% endblock %} 
+       
+{% block recent_articles %}
+    {{ render(controller('FrontendBundle:Article:getRecentArticles' )) }}
+{% endblock %}        

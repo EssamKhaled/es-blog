@@ -1,0 +1,86 @@
+{% extends "BackendBundle::base.html.twig" %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/layout/Backend/assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/layout/Backend/assets/plugins/select2/select2.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/layout/Backend/assets/scripts/form-validation.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block documentReady %}
+    <script>
+        jQuery(document).ready(function() {
+           App.init();
+           FormValidation.init();
+        });
+    </script>
+{% endblock %}
+
+{% block main_content %}
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>{% trans %}Edit Article{% endtrans %}</div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"></a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="{{ path('update_article', { 'id': entity.id } ) }}" {{ form_enctype(edit_form) }} method="POST" autocomplete="off" id="form_sample_1" class="form-horizontal">
+                    <input type="hidden" name="_method" value="PUT" />                    
+                    <div class="alert alert-error hide">
+                        <button class="close" data-dismiss="alert"></button>
+                        You have some form errors. Please check below.
+                    </div>
+                    <div class="alert alert-success hide">
+                        <button class="close" data-dismiss="alert"></button>
+                        Your form validation is successful!
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{% trans %}Title{% endtrans %}<span class="required">*</span></label>
+                        <div class="controls">
+                            {{ form_widget(edit_form.title) }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{% trans %}Content{% endtrans %}<span class="required">*</span></label>
+                        <div class="controls">
+                            {{ form_widget(edit_form.content) }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{% trans %}Category{% endtrans %}<span class="required">*</span></label>
+                        <div class="controls">
+                            {{ form_widget(edit_form.category) }}
+                        </div>
+                    </div>    
+                    <div class="control-group">
+                        <label class="control-label">{% trans %}Status{% endtrans %}</label>
+                        <div class="controls">
+                            {{ form_widget(edit_form.isPublished) }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{% trans %}Image{% endtrans %}</label>
+                        <div class="controls">
+                            {{ form_widget(edit_form.image) }}
+                        </div>
+                        <img src="{{ asset('uploads/articles/') }}{{ entity.image }}" width="150">
+                    </div>                        
+                        
+                    {{ form_widget(edit_form) }}
+                    <div class="form-actions">
+                        <button type="submit" class="btn blue">Edit</button>
+                        <a  href="{{ path('backend_post') }}" class="btn">Cancel</a>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+</div>
+{% endblock %}

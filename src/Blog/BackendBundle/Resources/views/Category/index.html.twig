@@ -1,0 +1,58 @@
+{% extends "BackendBundle::base.html.twig" %}
+
+{% block main_content %}
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-edit"></i>{% trans %} Available Categories {% endtrans %}</div>
+                <div class="tools">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="javascript:;" class="remove"></a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="btn-group">
+                        <button class="btn green" onclick="window.location.href='{{ path("new_category") }}'">
+                        Add New <i class="icon-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>{% trans %}#{% endtrans %}</th>
+                            <th>{% trans %}Name{% endtrans %}</th>                            
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entity in entities %}
+                        <tr>
+                            <td>{{ entity.id }}</td>                            
+                            <td>{{ entity.name }}</td>                            
+                            <td>
+                                <a href="{{ path("edit_category", {'id': entity.id } ) }}" class="btn mini blue"><i class="icon-edit"></i> Edit</a>                                
+                                <a href="#static" class=" btn mini red" data-toggle="modal" ><i class="icon-remove"></i> Delete</a>
+                                <div id="static" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to Delete this Category ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-dismiss="modal" class="btn">No</button>
+                                        <a href="{{ path('category_delete', { 'id': entity.id } ) }}"  class="btn red">Yes</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+{% endblock %}

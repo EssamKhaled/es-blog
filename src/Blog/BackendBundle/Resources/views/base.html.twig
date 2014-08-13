@@ -1,0 +1,22 @@
+{% extends "LayoutBundle:Backend:mainLayout.html.twig" %}
+
+{% block main_menu %}
+<li class="start">
+    <a href="{{ path('dashboard') }}">
+        <i class="icon-dashboard"></i>
+        <span class="title">Dashboard</span>
+    </a>
+</li>
+<li>
+    <a href="{{ path('backend_category') }}">
+        <i class="icon-list"></i>
+        <span class="title">Category</span>
+    </a>
+</li>
+<li>
+    <a href="{{ path('backend_post') }}">
+        <i class="icon-list"></i>
+        <span class="title">Post</span>
+    </a>
+</li>
+{% endblock %}

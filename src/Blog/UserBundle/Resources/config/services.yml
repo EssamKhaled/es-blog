@@ -1,0 +1,6 @@
+services:
+    elshaab_user.registration.form.type:
+        class: ElShaab\UserBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: elshaab_user_registration }

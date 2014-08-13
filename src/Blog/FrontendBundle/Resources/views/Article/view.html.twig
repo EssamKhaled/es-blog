@@ -1,0 +1,110 @@
+{% extends "FrontendBundle::base.html.twig" %}
+
+{% block articles %}
+<div class="span9 blog-item margin-bottom-40">
+    <div class="blog-item-img">
+        <!-- BEGIN CAROUSEL -->            
+        <div class="front-carousel">
+            <img src="{{ asset('uploads/articles/') }}{{entity.image}}" alt="">                     
+        </div>
+        <!-- END CAROUSEL -->             
+    </div>
+    <h2><a href="#">{{entity.title}}</a></h2>
+    <p>{{entity.content}}</p>
+    
+    <ul class="blog-info">
+        <li><i class="icon-user"></i> By admin</li>
+        <li><i class="icon-calendar"></i> {{ entity.created|date('d-M-Y') }} </li>
+        
+        <li>
+            <i class="icon-tags"></i>
+            {% for category in entity.category %}
+                {{ category.name}}
+                {% if not loop.last %}, &nbsp;{% endif %}                                
+            {% endfor %}            
+        </li>
+    </ul>
+    
+    <ol id="update">
+        {% for comment in entity.comment %}
+            {% if comment.approved == "YES" %}
+            <li>
+                <div class="media">
+                    <a href="#" class="pull-left">
+                    <img src="{{ asset('bundles/layout/Frontend/assets/img/people/img1-small.jpg') }}" alt="" class="media-object">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ comment.commentAuthor }} <span> {{ "now"|date('d-m-Y') }} </span></h4>
+                        <p>{{ comment.commentContent}}</p>
+                    </div>
+                </div>
+                <hr>
+            </li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+    <div id="flash"></div>
+    
+    
+    <div class="post-comment">
+        <h3>Leave a Comment</h3>
+        <form  action="#" method="post" id="commentForm">
+            <label>Name</label>
+            <input type="text"  id="name" class="span7 m-wrap">
+            <label>Email <span class="color-red">*</span></label>
+            <input type="text"  id="email" class="span7 m-wrap">
+            <label>Message</label>
+            <textarea id="comment" class="span10 m-wrap" rows="8"></textarea>
+            <p><button class="btn theme-btn" id="submit" type="submit">Post a Comment</button></p>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block documentReady %}
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            App.init();
+            
+            $(function() {
+                $("#submit").click(function(e){
+                    e.preventDefault();
+                    
+                    var name = $("#name").val();
+                    var email = $("#email").val();
+                    var comment = $("#comment").val();
+                    var dataString = 'name='+ name + '&email=' + email + '&comment=' + comment + '&id=' + '{{entity.id}}';
+                    
+                    if(name=='' || email=='' || comment==''){
+                        alert('Please Give Valid Details');
+                    }
+                    else{
+                        $("#flash").show();
+                        $("#flash").fadeIn(400).html('<img src="{{ asset('bundles/layout/Frontend/assets/img/ajax-loader.gif') }}" />Loading Comment...');
+                                                      
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ path('add_comment') }}",
+                            data: dataString,
+                            cache: false,
+                            success: function(res){
+                            var commentDate = '<li><div class="media"><a href="#" class="pull-left"><img src="{{ asset('bundles/layout/Frontend/assets/img/people/img1-small.jpg') }}" alt="" class="media-object"></a><div class="media-body"><h4 class="media-heading">'+name+'<span>'+{{ "now"|date('d') }}+'-'+{{ "now"|date('m') }}+'-'+{{ "now"|date('Y') }}+'</span></h4><p>'+comment+'</p></div></div><hr></li>';
+                                $("ol#update").append(commentDate);
+                                $("ol#update li:last").fadeIn("slow");
+                                $("#flash").hide();
+                                $('#commentForm')[0].reset();
+                                alert('Sorry! this comment needs the Author Approval.');
+                                $("ol#update li:last").css( "background-color" ,"#FAF9E9" );
+                                
+                            }
+                        });     
+                    }
+                    return false;
+                }); 
+            });            
+        });
+    </script>
+{% endblock %} 
+    
+
+
